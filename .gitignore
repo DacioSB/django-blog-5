@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+bin/
+parts/
+sdist/
+var/
+build/
+develop-eggs/
+.installed.cfg
+*.egg-info/
+
+# Django-specific
+*.log
+*.pot
+*.sqlite3
+db.sqlite3
+/media/
+/static/
+
+# Environment variables
+.env
+.flaskenv
+
+# IDE-specific
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/

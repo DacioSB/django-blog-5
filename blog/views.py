@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from .models import Post
 from django.http import Http404
 from django.views.generic import ListView
+from .forms import EmailPostForm
 
 class PostListView(ListView):
     """
@@ -28,3 +29,20 @@ def post_detail(request, year, month, day, post):
     except Post.DoesNotExist:
         raise Http404("Post does not exist")
     return render(request, 'blog/post/detail.html', {'post': post})
+
+def post_share(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+
+    if request.method == "POST":
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            post_url = request.build_absolute_uri(post.get_absolute_url())
+            subject = f"{cd['name']} recommends you read {post.title}"
+            message = f"Read {post.title} at {post_url}\n\n{cd['name']}\'s comments: {cd['comments']}"
+            #send_mail(subject, message, 'I2Tb7@example.com', [cd['to']])
+            sent = True
+            return render(request, 'blog/post/share.html', {'post': post, 'form': form, 'sent': sent})
+    else:
+        form = EmailPostForm()
+    return render(request, 'blog/post/share.html', {'post': post, 'form': form})
